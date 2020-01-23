@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-app.use(require('./routes/create_user'));
+app.use(require('./routes/create_user.routes'));
 
 //-------------------iniciar servidor----------------------------
 app.listen(process.env.PORT, () => {
