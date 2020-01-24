@@ -62,7 +62,7 @@ exports.create = (req, res) => {
 
                 User.create(user, (err, data) => {
                     if (err)
-                        res.status(200).json({
+                        res.status(500).json({
                             message: err.message || "Ocurrio un error mientras se creaba el usuario."
                         });
                     else res.json(data);
@@ -87,11 +87,11 @@ exports.getTransactionHistory = (req, res) => {
     }
 
     User.getTransactionHistory(req.headers.user_id, (err, data) => {
-        if (err)
-            res.status(200).json({
+        if (err) {
+            res.status(500).json({
                 message: err.message || "Ocurrio un error mientras se consultaba el historial."
             });
-        else res.json(data);
+        } else res.json(data);
     });
 };
 
@@ -105,7 +105,7 @@ exports.getPoints = (req, res) => {
     }
     User.getPoints(req.headers.user_id, (err, data) => {
         if (err) {
-            res.status(200).json({
+            res.status(500).json({
                 message: err.message || "Ocurrio un error mientras se consulta la suma de puntos."
             });
         } else res.json(data);
