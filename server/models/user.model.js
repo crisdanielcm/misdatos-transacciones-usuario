@@ -20,7 +20,7 @@ User.create = (newUser, result) => {
 };
 
 User.findByEmail = (userEmail, result) => {
-    sql.query('SELECT * FROM users WHERE email = ?', userEmail, (err, res) => {
+    sql.query("SELECT * FROM users WHERE email = ?", userEmail, (err, res) => {
         if (err) {
             result(err, null);
             return;
@@ -30,9 +30,35 @@ User.findByEmail = (userEmail, result) => {
             result(null, { response: true });
             return;
         }
-
         result(null, { response: false });
-    })
+    });
 }
 
+User.getTransactionHistory = (user_id, result) => {
+    sql.query('SELECT * FROM users u JOIN transactions t on u.user_id = t.user_id WHERE t.user_id = ?', user_id, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        if (res.length > 0) {
+            result(null, { history: res });
+            return;
+        }
+        result(null, { response: "No se encontraron resultados" });
+    });
+}
+
+User.getPoints = (user_id, result) => {
+    sql.query('SELECT SUM(t.points) as points FROM users u JOIN transactions t ON u.user_id = t.user_id WHERE t.status = ? AND t.user_id = ?', [1, user_id], (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+        if (res.length > 0) {
+            result(null, { points: res });
+            return;
+        }
+        result(null, { response: "No se encontraron resultados" });
+    });
+}
 module.exports = User;

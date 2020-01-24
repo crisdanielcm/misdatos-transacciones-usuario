@@ -65,7 +65,7 @@ exports.create = (req, res) => {
                         res.status(200).json({
                             message: err.message || "Ocurrio un error mientras se creaba el usuario."
                         });
-                    else res.send(data);
+                    else res.json(data);
                 });
 
             } else {
@@ -75,6 +75,39 @@ exports.create = (req, res) => {
             }
         }
     });
-
-
 };
+
+exports.getTransactionHistory = (req, res) => {
+    if (!req.headers) {
+        res.status(400).json({
+            success: false,
+            message: "Petición inválida!"
+        });
+        return;
+    }
+
+    User.getTransactionHistory(req.headers.user_id, (err, data) => {
+        if (err)
+            res.status(200).json({
+                message: err.message || "Ocurrio un error mientras se consultaba el historial."
+            });
+        else res.json(data);
+    });
+};
+
+exports.getPoints = (req, res) => {
+    if (!req.headers) {
+        res.status(400).json({
+            success: false,
+            message: "Petición inválida!"
+        });
+        return;
+    }
+    User.getPoints(req.headers.user_id, (err, data) => {
+        if (err) {
+            res.status(200).json({
+                message: err.message || "Ocurrio un error mientras se consulta la suma de puntos."
+            });
+        } else res.json(data);
+    });
+}
